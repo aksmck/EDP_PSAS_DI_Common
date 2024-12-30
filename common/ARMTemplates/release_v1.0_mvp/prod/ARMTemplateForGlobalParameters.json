@@ -1,0 +1,240 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": "Data Factory name",
+            "defaultValue": "adf-psas-deda-fdp-prod-01"
+        },
+        "dataFactory_properties_globalParameters_SQLSERVER_SERVERNAME_value": {
+            "type": "string",
+            "defaultValue": "sql-server-psas-deda-fdp-prod.database.windows.net"
+        },
+        "dataFactory_properties_globalParameters_SQLSERVER_USERNAME_value": {
+            "type": "string",
+            "defaultValue": "psasfdpsqladmin"
+        },
+        "dataFactory_properties_globalParameters_EMAIL_RECEIPT_value": {
+            "type": "string",
+            "defaultValue": "prakhar.chauhan@mckesson.com;niraj.upadhyay@mckesson.com;Sanket.Dahatonde@McKesson.com"
+        },
+        "dataFactory_properties_globalParameters_SQLSERVER_DATABASENAME_value": {
+            "type": "string",
+            "defaultValue": "sqldb-psas-deda-fdp-prod-01"
+        },
+        "dataFactory_properties_globalParameters_AZURE_SQLSERVER_PASSWORD_value": {
+            "type": "string",
+            "defaultValue": "secret-psas-fdp-sql-server-pwd"
+        },
+        "dataFactory_properties_globalParameters_AZURE_SQLSERVER_USERNAME_value": {
+            "type": "string",
+            "defaultValue": "secret-psas-fdp-sql-server-username"
+        },
+        "dataFactory_properties_globalParameters_SQLSERVER_DATABASEPORT_value": {
+            "type": "string",
+            "defaultValue": "1433"
+        },
+        "dataFactory_properties_globalParameters_SQLSERVER_LOGGING_TABLENAME_value": {
+            "type": "string",
+            "defaultValue": "DI_DRIVER_AUDIT_TABLE"
+        },
+        "dataFactory_properties_globalParameters_DATABRICKS_SECRETSCOPE_value": {
+            "type": "string",
+            "defaultValue": "scope-az-kv-psas-deda-fdp-prod"
+        },
+        "dataFactory_properties_globalParameters_SAP_BCP_ENV_value": {
+            "type": "string",
+            "defaultValue": "BCP"
+        },
+        "dataFactory_properties_globalParameters_SAP_BW_ENV_value": {
+            "type": "string",
+            "defaultValue": "BHP"
+        },
+        "dataFactory_properties_globalParameters_BEX_PARTITION_value": {
+            "type": "string",
+            "defaultValue": "PCOPYPDOC"
+        },
+        "dataFactory_properties_globalParameters_AZURE_RESOURCEVALUE_value": {
+            "type": "string",
+            "defaultValue": "https://management.azure.com"
+        },
+        "dataFactory_properties_globalParameters_SQLSERVER_SAP_CONNECTION_TABLENAME_value": {
+            "type": "string",
+            "defaultValue": "dbo.DI_CONNECTION_CONTROL_TABLE"
+        },
+        "dataFactory_properties_globalParameters_LOGIC_APPS_URL_value": {
+            "type": "string",
+            "defaultValue": "https://logic-psas-deda-fdp-prod-01.azurewebsites.net:443/api/Send_alert_email/triggers/When_a_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=fW0Oq9LeHNboGz8lNnza0OfZXC-XZcBYlv2r8jpTb-M"
+        },
+        "dataFactory_properties_globalParameters_SUBSCRIPTION_ID_value": {
+            "type": "string",
+            "defaultValue": "7626680d-6b14-490f-9c09-c889c63a5c1e"
+        },
+        "dataFactory_properties_globalParameters_RESOURCE_GROUP_NAME_value": {
+            "type": "string",
+            "defaultValue": "rg-psas-deda-westus-prod"
+        },
+        "dataFactory_properties_globalParameters_DATABRICKS_WORKSPACE_URL_value": {
+            "type": "string",
+            "defaultValue": "https://adb-7058489503953372.12.azuredatabricks.net"
+        },
+        "dataFactory_properties_globalParameters_DATABRICKS_WORKSPACE_ID_value": {
+            "type": "string",
+            "defaultValue": "/subscriptions/7626680d-6b14-490f-9c09-c889c63a5c1e/resourceGroups/rg-psas-deda-westus-prod/providers/Microsoft.Databricks/workspaces/dbw-psas-deda-fdp-prod-01"
+        },
+        "dataFactory_properties_globalParameters_DATABRICKS_CLUSTER_VERSION_value": {
+            "type": "string",
+            "defaultValue": "13.3.x-scala2.12"
+        },
+        "dataFactory_properties_globalParameters_DATABRICKS_NODE_TYPE_value": {
+            "type": "string",
+            "defaultValue": "Standard_E32d_v4"
+        },
+        "dataFactory_properties_globalParameters_DATABRICKS_DRIVER_TYPE_value": {
+            "type": "string",
+            "defaultValue": "Standard_E32_v3"
+        },
+        "dataFactory_properties_globalParameters_DATABRICKS_CLUSTER_ID_value": {
+            "type": "string",
+            "defaultValue": "0212-182134-6w6k1ym2"
+        },
+        "dataFactory_properties_globalParameters_AZURE_STORAGE_ACCOUNT_URL_value": {
+            "type": "string",
+            "defaultValue": "https://stpsasdedafdpprod01.dfs.core.windows.net/"
+        },
+        "dataFactory_properties_globalParameters_AZURE_KEY_VAULT_URL_value": {
+            "type": "string",
+            "defaultValue": "https://kv-psas-deda-fdp-prod-01.vault.azure.net/"
+        },
+        "dataFactory_location": {
+            "type": "string",
+            "defaultValue": "westus"
+        },
+        "dataFactory_identity_type": {
+            "type": "string",
+            "defaultValue": "SystemAssigned"
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+    },
+    "resources": [
+        {
+            "name": "[parameters('factoryName')]",
+            "type": "Microsoft.DataFactory/factories",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "globalParameters": {
+                    "SQLSERVER_SERVERNAME": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_SQLSERVER_SERVERNAME_value')]"
+                    },
+                    "SQLSERVER_USERNAME": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_SQLSERVER_USERNAME_value')]"
+                    },
+                    "EMAIL_RECEIPT": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_EMAIL_RECEIPT_value')]"
+                    },
+                    "SQLSERVER_DATABASENAME": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_SQLSERVER_DATABASENAME_value')]"
+                    },
+                    "AZURE_SQLSERVER_PASSWORD": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_AZURE_SQLSERVER_PASSWORD_value')]"
+                    },
+                    "AZURE_SQLSERVER_USERNAME": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_AZURE_SQLSERVER_USERNAME_value')]"
+                    },
+                    "SQLSERVER_DATABASEPORT": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_SQLSERVER_DATABASEPORT_value')]"
+                    },
+                    "SQLSERVER_LOGGING_TABLENAME": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_SQLSERVER_LOGGING_TABLENAME_value')]"
+                    },
+                    "DATABRICKS_SECRETSCOPE": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_DATABRICKS_SECRETSCOPE_value')]"
+                    },
+                    "SAP_BCP_ENV": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_SAP_BCP_ENV_value')]"
+                    },
+                    "SAP_BW_ENV": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_SAP_BW_ENV_value')]"
+                    },
+                    "BEX_PARTITION": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_BEX_PARTITION_value')]"
+                    },
+                    "AZURE_RESOURCEVALUE": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_AZURE_RESOURCEVALUE_value')]"
+                    },
+                    "SQLSERVER_SAP_CONNECTION_TABLENAME": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_SQLSERVER_SAP_CONNECTION_TABLENAME_value')]"
+                    },
+                    "LOGIC_APPS_URL": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_LOGIC_APPS_URL_value')]"
+                    },
+                    "SUBSCRIPTION_ID": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_SUBSCRIPTION_ID_value')]"
+                    },
+                    "RESOURCE_GROUP_NAME": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_RESOURCE_GROUP_NAME_value')]"
+                    },
+                    "DATABRICKS_WORKSPACE_URL": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_DATABRICKS_WORKSPACE_URL_value')]"
+                    },
+                    "DATABRICKS_WORKSPACE_ID": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_DATABRICKS_WORKSPACE_ID_value')]"
+                    },
+                    "DATABRICKS_CLUSTER_VERSION": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_DATABRICKS_CLUSTER_VERSION_value')]"
+                    },
+                    "DATABRICKS_NODE_TYPE": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_DATABRICKS_NODE_TYPE_value')]"
+                    },
+                    "DATABRICKS_DRIVER_TYPE": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_DATABRICKS_DRIVER_TYPE_value')]"
+                    },
+                    "DATABRICKS_CLUSTER_ID": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_DATABRICKS_CLUSTER_ID_value')]"
+                    },
+                    "AZURE_STORAGE_ACCOUNT_URL": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_AZURE_STORAGE_ACCOUNT_URL_value')]"
+                    },
+                    "AZURE_KEY_VAULT_URL": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_AZURE_KEY_VAULT_URL_value')]"
+                    }
+                }
+            },
+            "dependsOn": [],
+            "location": "[parameters('dataFactory_location')]",
+            "identity": {
+                "type": "[parameters('dataFactory_identity_type')]",
+                "principalId": "ec7d5e22-8bf6-487b-bb63-b1b7dd86c84a",
+                "tenantId": "da67ef1b-ca59-4db2-9a8c-aa8d94617a16"
+            }
+        }
+    ]
+}
