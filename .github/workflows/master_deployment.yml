@@ -11,33 +11,10 @@ on:
           - qat
           - prod
         required: true
-      function_name:
-        description: 'Select Data Source to deploy'
-        type: choice
-        options:
-          - none
-          - all
-          - IQVIA_SALES
-          - SA_INSIGHTS
-          - MPB-MNC
-          - SFDC_CRM
-          - VARICENT_SALES
-        required: true
-      databricks_deployment:
-        description: 'Enable Databricks Deployment?'
+      databricks_deployment_ingestion_utilities:
+        description: 'Enable Databricks Deployment (Ingestion Utilities)?'
         type: boolean
-        required: true
-      databricks_deployment_steps:
-        description: 'Select Databricks deployment step'
-        type: choice
-        options:
-          - none
-          - ingestion_utilities
-          - ddl
-          - dml
-          - all
         required: false
-        default: 'none'
       deploy_linked_service:
         description: 'Deploy ADF Linked Services'
         type: boolean
@@ -88,28 +65,12 @@ jobs:
             echo "Environment selection cannot be empty."
             exit 1
           fi
-          
-      - name: Validate Function Name
-        run: |
-          if [[ "${{ inputs.function_name }}" == "none" && ( "${{ inputs.databricks_deployment }}" == "true" || "${{ inputs.deploy_datasets }}" == "true" || "${{ inputs.deploy_linked_service }}" == "true" || "${{ inputs.deploy_common_pipelines }}" == "true" || "${{ inputs.deploy_triggers }}" == "true" ) ]]; then
-            echo "If 'function_name' is 'none', no deployment options should be selected."
-            exit 1
-          fi
-          
-      - name: Validate Databricks Deployment Steps
-        run: |
-          if [[ "${{ inputs.databricks_deployment }}" == "true" && "${{ inputs.databricks_deployment_steps }}" == "none" ]]; then
-            echo "If Databricks deployment is enabled, at least one deployment step must be selected."
-            exit 1
-          fi
-          
+
       - name: Validate Linked Services and Datasets Deployment
         run: |
           if [[ "${{ inputs.deploy_linked_service }}" == "true" || "${{ inputs.deploy_datasets }}" == "true" ]]; then
-            if [[ "${{ inputs.function_name }}" == "none" ]]; then
-              echo "If deploying linked services or datasets, a valid function name must be provided."
-              exit 1
-            fi
+            echo "If deploying linked services or datasets, a valid function name must be provided."
+            exit 1
           fi
 
   trigger_workflows:
@@ -119,14 +80,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      # Trigger Databricks Deployment
-      - name: Trigger Databricks Deployment
-        if: ${{ inputs.databricks_deployment == true }}
+      # Trigger Databricks Deployment (Ingestion Utilities)
+      - name: Trigger Databricks Deployment (Ingestion Utilities)
+        if: ${{ inputs.databricks_deployment_ingestion_utilities == true }}
         run: |
           curl -X POST \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -d '{"ref": "refs/heads/main", "inputs": {"environment": "${{ inputs.environment }}", "date": "${{ inputs.date }}", "databricks_deployment_steps": "${{ inputs.databricks_deployment_steps }}", "function_name": "${{ inputs.function_name }}"}}' \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/databricks.yml/dispatches
+            -d '{"ref": "refs/heads/main", "inputs": {"environment": "${{ inputs.environment }}", "date": "${{ inputs.date }}"}}' \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/databricks_ingestion_utilities.yml/dispatches
 
       # Trigger ADF Datasets Deployment
       - name: Trigger ADF Datasets Deployment
