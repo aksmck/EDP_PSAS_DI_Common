@@ -1,0 +1,21 @@
+CREATE TABLE [dbo].[DLT_DQ_METADATA] (
+dq_id nvarchar(max),
+rule_id nvarchar(max),
+pipeline_name nvarchar(max),
+table_name nvarchar(max),
+col_name nvarchar(max),
+col_desc nvarchar(max),
+rule_type nvarchar(max),
+rule_name nvarchar(max),
+rule_val nvarchar(max),
+is_active nvarchar(max),
+remediate_flg nvarchar(max),
+quarantine_flg nvarchar(max),
+email nvarchar(max),
+email_address nvarchar(max),
+is_custom nvarchar(max),
+custom_query nvarchar(max),
+layer nvarchar(max),
+env nvarchar(max),
+process_name nvarchar(max)
+);

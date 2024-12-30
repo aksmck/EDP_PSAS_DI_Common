@@ -1,0 +1,52 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Send_Email": {
+                "inputs": {
+                    "parameters": {
+                        "body": "@triggerBody()?['body']",
+                        "from": "@triggerBody()?['fromEmail']",
+                        "importance": "Normal",
+                        "isHTML": true,
+                        "subject": "@triggerBody()?['sub']",
+                        "to": "@triggerBody()?['to']"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "Smtp",
+                        "operationId": "sendEmail",
+                        "serviceProviderId": "/serviceProviders/Smtp"
+                    }
+                },
+                "runAfter": {},
+                "type": "ServiceProvider"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "inputs": {
+                    "method": "POST",
+                    "schema": {
+                        "properties": {
+                            "body": {
+                                "type": "string"
+                            },
+                            "sub": {
+                                "type": "string"
+                            },
+                            "to": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "kind": "Stateful"
+}
